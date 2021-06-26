@@ -20,10 +20,11 @@ const modalStyles = {
   },
 };
 
-const Header = ({ id, showBookNowButton }) => {
+const Header = ({ id, showBookNowButton, baseUrl }) => {
   Modal.setAppElement("#root");
+  const authUrl = baseUrl+ "auth/";
   const classes = useStyles();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [usernameObj, setUserName] = useState({
@@ -107,12 +108,28 @@ const Header = ({ id, showBookNowButton }) => {
       return;
     }
     if (!usernameObj.error && !loginPasswordObj.error) {
-      const userPassword = localStorage.getItem(usernameObj.username);
-      if (userPassword === null) return;
-      if (userPassword === loginPasswordObj.loginPassword) {
-        setIsLoggedIn(true);
-        closeModal();
-      }
+        const options = {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: usernameObj.username,
+              password: loginPasswordObj.password,
+            }),
+          }(async () => {
+            try {
+              const response = await fetch(`${authUrl}login`, options);
+              const token = await response.json();
+              if (token) {
+                setIsLoggedIn(true);
+                closeModal();
+              }
+            } catch (e) {
+              console.warn(e);
+            }
+          })();
     }
   };
 
@@ -134,11 +151,29 @@ const Header = ({ id, showBookNowButton }) => {
       !contactObj.error &&
       !registerPasswordObj.error
     ) {
-      localStorage.setItem(
-        firstNameObj.firstName,
-        registerPasswordObj.registerPassword
-      );
-      setRegistration(true);
+        const options = {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email_address: emailObj.email,
+              first_name: firstNameObj.firstName,
+              last_name: lastNameObj.lastName,
+              mobile_number: contactObj.contact,
+              password: loginPasswordObj.password,
+            }),
+          }(async () => {
+            try {
+              const response = await fetch(`${authUrl}signup`, options);
+              if (response.OK) {
+                setRegistration(true);
+              }
+            } catch (e) {
+              console.warn(e);
+            }
+          })();
     }
   };
   const handleChange = (event, newValue) => {

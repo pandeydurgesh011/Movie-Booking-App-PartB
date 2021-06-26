@@ -30,6 +30,7 @@ const Home = () => {
     if (formValues.genresList.length > 0) {
       finalFilteredMovieList = finalFilteredMovieList.filter(movie => {
         for (let i = 0; i < formValues.genresList.length; i++) {
+
           if (movie.genres.includes(formValues.genresList[i].name)) return true;
         }
         return false;
