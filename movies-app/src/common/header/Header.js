@@ -7,10 +7,9 @@ class Header extends React.Component {
             return <div>
                     <header className="header">
                         <img className="header-logo" src={logo}  alt="Movies App Logo" />
+                        <div>{this.props.children}</div>
                     </header>
-                    <div className="upcoming-header">
-                        <span className="heading">Upcoming Movies</span>
-                    </div>
+                    
                 </div>
             
   }
