@@ -12,7 +12,6 @@ const useStyles = makeStyles({
 });
 export default function AllMovies({ movies }) {
   const classes = useStyles();
-  console.log("classes", classes);
   return (
     <div>
       <GridList cols={4} cellHeight={350} className={classes.link}>

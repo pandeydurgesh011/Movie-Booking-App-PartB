@@ -21,7 +21,6 @@ const Home = () => {
   const filterList = () => {
     let finalFilteredMovieList = moviesData;
     const formValues = { ...filterFormValues };
-    console.log("formValues", formValues);
     if (formValues.movieName) {
       finalFilteredMovieList = finalFilteredMovieList.filter(
         movie =>
@@ -31,7 +30,6 @@ const Home = () => {
     if (formValues.genresList.length > 0) {
       finalFilteredMovieList = finalFilteredMovieList.filter(movie => {
         for (let i = 0; i < formValues.genresList.length; i++) {
-          console.log(movie.genres, formValues.genresList);
           if (movie.genres.includes(formValues.genresList[i].name)) return true;
         }
         return false;

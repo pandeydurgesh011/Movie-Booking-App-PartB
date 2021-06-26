@@ -100,7 +100,7 @@ const Details = ({ match, movies }) => {
             <GridList cols={2} className={classes.typo}>
               {movie.artists.map(artist => (
                 <GridListTile key={artist.id} className={classes.typo}>
-                  <img src={artist.poster_url} alt={artist.first_name} />
+                  <img src={artist.profile_url} alt={artist.first_name} />
                   <GridListTileBar
                     title={`${artist.first_name} ${artist.last_name}`}
                   />
