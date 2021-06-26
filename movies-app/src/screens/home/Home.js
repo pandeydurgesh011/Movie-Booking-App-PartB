@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
 import Header from "./../../common/header/Header";
 import moviesData from "./../../common/moviesData";
@@ -7,28 +7,25 @@ import AllMovies from "./HomeComponents/AllMovies";
 import MoviesFilterForm from "./HomeComponents/MoviesFilterForm";
 import genres from "./../../common/genre";
 import artists from "./../../common/artists";
-class Home extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      movies: moviesData,
-      formValues: {
-        movieName: "",
-        genresList: [],
-        artistsList: [],
-        releaseDateStart: null,
-        releaseDateEnd: null,
-      },
-    };
-  }
-  filterList = () => {
+
+const Home = () => {
+  const [movies, setMovies] = useState(moviesData);
+  const [filterFormValues, setFilterFormValues] = useState({
+    movieName: "",
+    genresList: [],
+    artistsList: [],
+    releaseDateStart: null,
+    releaseDateEnd: null,
+  });
+
+  const filterList = () => {
     let finalFilteredMovieList = moviesData;
-    const formValues = { ...this.state.formValues };
+    const formValues = { ...filterFormValues };
+    console.log("formValues", formValues);
     if (formValues.movieName) {
       finalFilteredMovieList = finalFilteredMovieList.filter(
         movie =>
-          movie.title.toLowerCase() ===
-          this.state.formValues.movieName.toLowerCase()
+          movie.title.toLowerCase() === formValues.movieName.toLowerCase()
       );
     }
     if (formValues.genresList.length > 0) {
@@ -80,61 +77,58 @@ class Home extends React.Component {
         return movieReleaseDate <= releaseDateEnd;
       });
     }
-    console.log(formValues.releaseDateStart, formValues.releaseDateEnd);
-    console.log(finalFilteredMovieList);
-    this.setState({ movies: finalFilteredMovieList });
+    setMovies(finalFilteredMovieList);
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.filterList();
-    console.log("Submitted");
+    filterList();
   };
 
-  handleChange = e => {
-    const formValues = { ...this.state.formValues };
+  const handleChange = e => {
+    const formValues = { ...filterFormValues };
     formValues[e.target.name] = e.target.value;
-    this.setState({ formValues });
+    setFilterFormValues(formValues);
   };
 
-  handleAutoCompleteChange = (e, v) => {
-    const formValues = { ...this.state.formValues };
+  const handleAutoCompleteChange = (e, v) => {
+    const formValues = { ...filterFormValues };
     formValues[`${e.target.id.split("-")[0]}List`] = v;
-    this.setState({ formValues });
+    setFilterFormValues(formValues);
   };
 
-  handleDateChange = (d, v, name) => {
-    const formValues = { ...this.state.formValues };
+  const handleDateChange = (d, v, name) => {
+    const formValues = { ...filterFormValues };
     formValues[name] = new Date(d).toDateString();
-    this.setState({ formValues });
+    setFilterFormValues(formValues);
   };
 
-  render() {
-    return (
-      <div>
-        <Header />
-        <div className="upcoming-movies-header">
+  return (
+    <div>
+      <Header />
+      <div className="upcoming-movies-header">
         <span>Upcoming Movies</span>
+      </div>
+      <UpComingMovies movies={moviesData} />
+      <div className="flex-container">
+        <div className="left">
+          <AllMovies movies={movies} />
         </div>
-        <UpComingMovies movies={moviesData} />
-        <div className="flex-container">
-          <div className="left">
-            <AllMovies movies={this.state.movies} />
-          </div>
-          <div className="right">
-            <MoviesFilterForm
-              genres={genres}
-              artists={artists}
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              handleAutoCompleteChange={this.handleAutoCompleteChange}
-              handleDateChange={this.handleDateChange}
-              releaseDateStart={this.state.formValues.releaseDateStart}
-              releaseDateEnd={this.state.formValues.releaseDateEnd}
-            />
-          </div>
+        <div className="right">
+          <MoviesFilterForm
+            genres={genres}
+            artists={artists}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            handleAutoCompleteChange={handleAutoCompleteChange}
+            handleDateChange={handleDateChange}
+            releaseDateStart={filterFormValues.releaseDateStart}
+            releaseDateEnd={filterFormValues.releaseDateEnd}
+          />
         </div>
       </div>
-    );
-  }
-}export default Home;
+    </div>
+  );
+};
+
+export default Home;

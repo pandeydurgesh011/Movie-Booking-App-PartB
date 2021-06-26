@@ -12,15 +12,15 @@ const useStyles = makeStyles({
 });
 export default function AllMovies({ movies }) {
   const classes = useStyles();
+  console.log("classes", classes);
   return (
     <div>
-      <GridList cols={4} cellHeight={350}>
+      <GridList cols={4} cellHeight={350} className={classes.link}>
         {movies.map(movie => (
           <GridListTile
-          component={Link}
-          to={`/details/${movie.id}`}
-          key={movie.id}
-          className={classes.link}>
+            component={Link}
+            to={`/details/${movie.id}`}
+            key={movie.id}>
             <img src={movie.poster_url} alt={movie.title} />
             <GridListTileBar
               title={movie.title}
@@ -33,5 +33,4 @@ export default function AllMovies({ movies }) {
       </GridList>
     </div>
   );
-  
 }

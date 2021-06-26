@@ -1,3 +1,4 @@
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -37,7 +38,7 @@ const useStyles = makeStyles(theme => {
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function App(props) {
+export default function MoviesFilterForm(props) {
   const {
     genres,
     artists,
@@ -75,7 +76,7 @@ export default function App(props) {
               getOptionLabel={option => option.name}
               disableCloseOnSelect
               renderOption={(option, { selected }) => (
-                <>
+                <React.Fragment>
                   <Checkbox
                     icon={icon}
                     checkedIcon={checkedIcon}
@@ -83,7 +84,7 @@ export default function App(props) {
                     checked={selected}
                   />
                   {option.name}
-                </>
+                </React.Fragment>
               )}
               renderInput={params => (
                 <TextField {...params} variant="standard" label="Genres" />
@@ -102,7 +103,7 @@ export default function App(props) {
               }
               disableCloseOnSelect
               renderOption={(option, { selected }) => (
-                <>
+                <React.Fragment>
                   <Checkbox
                     icon={icon}
                     checkedIcon={checkedIcon}
@@ -110,7 +111,7 @@ export default function App(props) {
                     checked={selected}
                   />
                   {`${option.first_name} ${option.last_name}`}
-                </>
+                </React.Fragment>
               )}
               renderInput={params => (
                 <TextField {...params} variant="standard" label="Artists" />
@@ -145,5 +146,4 @@ export default function App(props) {
       </Card>
     </div>
   );
-  
 }
